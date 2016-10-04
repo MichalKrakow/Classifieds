@@ -7,6 +7,6 @@ angular
 	})
 	.directive("helloWorld",function(){
 		return{
-			template: "<h1>{{ message }}</h1>"
+			template: "<h1>{{ name.last }}</h1>"
 		}
 	});	
