@@ -11,28 +11,72 @@
 <md-toolbar>
 	<div class="md-toolbar-tools">
 		<p>ngClassifieds</p>
-		<md-button>
+		<md-button ng-click="newClassified()">
 			<md-icon class="mdi mdi-plus-circle"></md-icon>
 			New Classified
 		</md-button>
 	</div>
 </md-toolbar>
 
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+	<md-toolbar>
+		<h1 class="md-toolbar-tools">Add a Classfied</h1>
+	</md-toolbar>
+	<md-content layout-padding>
+		<form>
+		  <md-input-container>
+		    <label for="title">Title</label>
+		    <input type="text" id="title" md-autofocus ng-model="classified.title">
+		  </md-input-container>
+		  <md-input-container>
+		    <label for="price">Price</label>
+		    <input type="text" id="price" ng-model="classified.price">
+		  </md-input-container>
+		  <md-input-container>
+		    <label for="description">Description</label>
+		    <textarea type="text" id="description" ng-model="classified.description"></textarea>
+		  </md-input-container>
+		  <md-input-container>
+		    <label for="image">Image Link</label>
+		    <input type="text" id="image" ng-model="classified.image">
+		  </md-input-container>
+		  <md-button class="md-primary" ng-if="!isEdit" ng-click="saveClassified(classified)">Save</md-button>
+		  <md-button class="md-primary" ng-if="isEdit" ng-click="saveEdit(classified)">Save Edit</md-button>
+		  <md-button ng-click="closeSidenav()" class="md-warn">Cancel</md-button>
+		  <pre>{{ classified | json }}</pre>
+		</form>
+	</md-content>
+</md-sidenav>
+
 <md-content class="md-padding" layout="row" layout-wrap>
-	<md-card flex="33">
-		<img src="img/image.jpg" alt="" />
+	<md-card flex="30" ng-repeat="classified in classifieds">
+		<img ng-src="{{ classified.image }}" alt="" />
 		<md-card-content>
-			<div class="classified-info">
-				<h2 class="md-title">First Item</h2>
-				<h3>$1,000,000</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+			<div class="classified-info" ng-show="!showContact">
+				<h2 class="md-title">{{ classified.title | uppercase }}</h2>
+				<h2>{{ classified.posted | date:'longDate' }}
+				<h3>{{ classified.price | currency }}</h3>
+				<p>{{ classified.description }}</p>
+			</div>
+
+			<div class="classified-contact" ng-show="showContact">
+				<p><md-icon class="mdi mdi-account"></md-icon>{{ classified.contact.name }}</p>
+				<p><md-icon class="mdi mdi-phone"></md-icon>{{ classified.contact.phone }}</p>
+				<p><md-icon class="mdi mdi-email"></md-icon>{{ classified.contact.email }}</p>
+			</div>
+
+			<div layout="row" ng-show="classified.contact">
+				<md-button ng-click="showContact = showContact ? false : true;">Show contact</md-button>
 			</div>
 		</md-card-content>
+
+		<md-card-actions layout="row" layout-align="end center">
+          <md-button class="md-icon-button" aria-label="Settings">
+            <md-icon class="mdi mdi-menu" ng-click="editClassified(classified)">
+          </md-button>
+        </md-card-actions>
+
 	</md-card>
 </md-content>
 
@@ -46,6 +90,7 @@
 <script src="node_modules/angular-aria/angular-aria.js"></script>
 <script src="node_modules/angular-material/angular-material.js"></script>
 <script src="scripts/app.js"></script>
-<script src="components/classifieds.ctr.js"></script>
+<script src="components/classifieds.ctr.js"></script><!-- controller -->
+<script src="components/classifieds.fac.js"></script><!-- factory -->
 </body>
 </html>
