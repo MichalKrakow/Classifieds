@@ -15,8 +15,31 @@
 			<md-icon class="mdi mdi-plus-circle"></md-icon>
 			New Classified
 		</md-button>
+		<md-button ng-click="showFilters = true">
+			<md-icon class="mdi mdi-magnify"></md-icon>
+			Filters
+		</md-button>
 	</div>
 </md-toolbar>
+
+<div class="filters" layout="row" layout-align="center top" ng-show="showFilters">
+	<md-input-container>
+		<label>Enter search term</label>
+		<input type="text" ng-model="classifiedsFilter"></input>
+	</md-input-container>
+
+	<md-input-container>
+		<label>Category</label>
+		<md-select ng-model="category">
+			<md-option ng-repeat="category in categories" value="{{ category }}">
+				{{ category }}
+			</md-option>
+		</md-select>
+	</md-input-container>
+	<md-input-container>
+		<md-button class="md-warn" ng-click="clearFilters()">Clear</md-button>
+	</md-input-container>
+</div>
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
 	<md-toolbar>
@@ -49,7 +72,10 @@
 </md-sidenav>
 
 <md-content class="md-padding" layout="row" layout-wrap>
-	<md-card flex="30" ng-repeat="classified in classifieds">
+	<md-card flex="30" 
+		class="classified" 
+		ng-repeat="classified in classifieds | filter: classifiedsFilter
+											 | filter: category">
 		<img ng-src="{{ classified.image }}" alt="" />
 		<md-card-content>
 
@@ -74,6 +100,9 @@
 		<md-card-actions layout="row" layout-align="end center">
           <md-button class="md-icon-button" aria-label="Settings">
             <md-icon class="mdi mdi-menu" ng-click="editClassified(classified)">
+          </md-button>
+          <md-button class="md-icon-button" aria-label="Settings">
+            <md-icon class="mdi mdi-delete" ng-click="deleteClassified($event, classified)">
           </md-button>
         </md-card-actions>
 
